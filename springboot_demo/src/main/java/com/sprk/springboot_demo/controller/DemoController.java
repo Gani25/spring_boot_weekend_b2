@@ -11,43 +11,70 @@ public class DemoController {
 
     // Methods
 //    @RequestMapping(value = {"/hello","/home"}, method = RequestMethod.GET)
-    @GetMapping({"/hello","/home"})
-    public String sayHello(){
+    @GetMapping({"/hello", "/home"})
+    public String sayHello() {
         return "Hello World";
     }
+
     @RequestMapping("/fruits")
-    public List<String> sayFruits(){
+    public List<String> sayFruits() {
 //        List<String> fruits = new ArrayList<>();
 //        fruits.add("Apple");
 //        fruits.add("Banana");
 //        fruits.add("Orange");
 //        fruits.add("Watermelon");
 
-        return Arrays.asList("Apple","Banana","Orange","Pineapple","Watermelon");
+        return Arrays.asList("Apple", "Banana", "Orange", "Pineapple", "Watermelon");
     }
 
     @RequestMapping("/number")
-    public int sayNumber(){
+    public int sayNumber() {
         return 50;
     }
 
     // Request Parameters
     // create a mapping which accept 2 numbers display product of that number
     @GetMapping("/api/req-param/add")
-    public String sayAddition(@RequestParam(name = "n1", defaultValue = "0") int num1,@RequestParam(defaultValue = "0") int num2){
+    public String sayAddition(@RequestParam(name = "n1", defaultValue = "0") int num1, @RequestParam(defaultValue = "0") int num2) {
         int result = num1 + num2;
-        return String.format("The addition of %d, %d = %d",num1,num2,result);
+        return String.format("The addition of %d, %d = %d", num1, num2, result);
     }
 
     // Path Variable
     @GetMapping("/api/path-variable/add/{n1}/{num2}")
-    public String sayAdditionPathVariable(@PathVariable(name = "n1") int num1,@PathVariable int num2){
+    public String sayAdditionPathVariable(@PathVariable(name = "n1") int num1, @PathVariable int num2) {
         int result = num1 + num2;
-        return String.format("The addition of %d, %d = %d with path variable",num1,num2,result);
+        return String.format("The addition of %d, %d = %d with path variable", num1, num2, result);
     }
 
     // create a mapping which accepts a number display fibonacci series till that number
     // input = 8 ->
     // Fibonacci Series till 8 iterations are:
     // 0 1 2 3 5 8 13 21
+
+    @GetMapping("/api/fibo/{num}")
+    public StringBuilder sayFibonacci(@PathVariable int num) {
+        int n1 = 0;
+        int n2 = 1;
+        StringBuilder result = new StringBuilder();
+        result.append("<h1>Fibonacci series from 1 to " + num + " is </h1>");
+        result.append("<b>");
+        result.append(n1 + ", ");
+        result.append(n2 + ", ");
+        for (int i = 2; i <= num; i++) {
+            int n3 = n1 + n2;
+            result.append(i == num ? n3 : n3 + ", ");
+            n1 = n2;
+            n2 = n3;
+        }
+
+        result.append("</b>");
+        return result;
+    }
+
+    // Create a list of fruits of length 10 and display fruit name based on position
+    // Apple, Orange, Mango, Litchi, Watermellon, Banana, Guava,Papaya, Musk Mellon, Custard Apple
+    // pos = 8 -> Papaya
+    // pos = 15 -> Only 10 fruits are there select from 1 to 10
+    // pos = 0/-5 -> ENter positive number greater than 0
 }
