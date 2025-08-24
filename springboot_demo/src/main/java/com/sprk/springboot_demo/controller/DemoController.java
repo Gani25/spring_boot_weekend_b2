@@ -1,5 +1,6 @@
 package com.sprk.springboot_demo.controller;
 
+import com.sprk.springboot_demo.entity.Student;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -77,4 +78,22 @@ public class DemoController {
     // pos = 8 -> Papaya
     // pos = 15 -> Only 10 fruits are there select from 1 to 10
     // pos = 0/-5 -> ENter positive number greater than 0
+
+    // Create mapping which returns student object
+    @GetMapping("/api/student")
+    public Student showStudent(){
+        Student student = new Student(1,"Abdul Gani","Memon","Male");
+        return student;
+    }
+
+    // Read Data of Student and display on console
+    @PostMapping("/api/student")
+    public Student getStudent(@RequestBody Student student){
+        System.out.println(student);
+        return student;
+    }
+
+    // create list of student and display as Get Mapping
+    
+
 }
