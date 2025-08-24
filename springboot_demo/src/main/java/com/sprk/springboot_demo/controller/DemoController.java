@@ -1,6 +1,10 @@
 package com.sprk.springboot_demo.controller;
 
 import com.sprk.springboot_demo.entity.Student;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -9,6 +13,25 @@ import java.util.List;
 
 @RestController
 public class DemoController {
+
+    private List<Student> students ;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Initializing Empty Array");
+        students = new ArrayList<>();
+        students.add(new Student(1,"Abdul Gani","Memon","Male"));
+        students.add(new Student(2,"Shubham","Mishra","Male"));
+        students.add(new Student(3,"Rutuja","More","Female"));
+
+    }
+
+    @PreDestroy
+    public void destroy() {
+        System.out.println("Clearing all resources");
+    }
+
+
 
     // Methods
 //    @RequestMapping(value = {"/hello","/home"}, method = RequestMethod.GET)
@@ -94,6 +117,28 @@ public class DemoController {
     }
 
     // create list of student and display as Get Mapping
-    
+    @GetMapping("/api/students")
+    public List<Student> showStudents(){
 
+        return students;
+    }
+
+    // Find student by roll no if rollno is incorrect display error message
+
+    @GetMapping("/student-roll-no")
+    public ResponseEntity<?> showStudentByRollNo(@RequestParam int rollNo){
+        Student student = null;
+        for (Student s : students) {
+            if (s.getRollNo() == rollNo) {
+                student = s;
+            }
+        }
+        if(student == null){
+            String msg = "Student with roll no = "+rollNo+" not found";
+//            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
+            return ResponseEntity.status(400).body(msg);
+        }
+        return new ResponseEntity<>(student, HttpStatus.OK);
+    }
 }
