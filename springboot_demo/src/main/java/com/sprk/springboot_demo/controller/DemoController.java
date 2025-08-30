@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @RestController
 public class DemoController {
 
     private List<Student> students ;
+
+
 
     @PostConstruct
     public void init() {
@@ -110,11 +113,11 @@ public class DemoController {
     }
 
     // Read Data of Student and display on console
-    @PostMapping("/api/student")
-    public Student getStudent(@RequestBody Student student){
-        System.out.println(student);
-        return student;
-    }
+//    @PostMapping("/api/student")
+//    public Student getStudent(@RequestBody Student student){
+//        System.out.println(student);
+//        return student;
+//    }
 
     // create list of student and display as Get Mapping
     @GetMapping("/api/students")
@@ -126,19 +129,35 @@ public class DemoController {
     // Find student by roll no if rollno is incorrect display error message
 
     @GetMapping("/student-roll-no")
-    public ResponseEntity<?> showStudentByRollNo(@RequestParam int rollNo){
+    public ResponseEntity<?> showStudentByRollNo(@RequestParam String rollNo){
+        if(!Pattern.matches("^\\d+$",rollNo)){
+
+            throw new NumberFormatException("Invalid roll no");
+        }
+        int rollNoInt = Integer.parseInt(rollNo);
         Student student = null;
         for (Student s : students) {
-            if (s.getRollNo() == rollNo) {
+            if (s.getRollNo() == rollNoInt) {
                 student = s;
             }
         }
         if(student == null){
-            String msg = "Student with roll no = "+rollNo+" not found";
+            String msg = "Student with roll no = "+rollNoInt+" not found";
 //            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
-            return ResponseEntity.status(400).body(msg);
+//            return ResponseEntity.status(400).body(msg);
+            throw new RuntimeException(msg);
         }
         return new ResponseEntity<>(student, HttpStatus.OK);
+    }
+
+    // create a mapping which add multiple student in our existing list
+    // create a mapping which accept roll no delete that student from our student lists.
+    @PostMapping("/api/save")
+    public List<Student> saveStudent(@RequestBody Student student){
+
+        students.add(student);
+        return students;
+
     }
 }
