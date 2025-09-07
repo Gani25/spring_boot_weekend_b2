@@ -12,4 +12,10 @@ public interface StudentService {
     List<Student> getAllStudents();
 
     Student getStudentByRollNo(long rollNo);
+
+    List<Student> getStudentsByGender(String gender);
+
+    boolean deleteStudentByRollNo(long rollNo);
+
+    Student updateByRollNo(long rollNo, Student updatedStudent);
 }

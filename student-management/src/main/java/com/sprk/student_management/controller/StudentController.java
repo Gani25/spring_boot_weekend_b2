@@ -36,4 +36,27 @@ public class StudentController {
 
     }
 
+    @GetMapping("/student/gender/{gender}")
+    public List<Student> getStudentsByGender(@PathVariable String gender) {
+        return studentService.getStudentsByGender(gender);
+    }
+
+    @DeleteMapping("/student/{rollNo}")
+    public String deleteStudent(@PathVariable long rollNo) {
+        if(studentService.deleteStudentByRollNo(rollNo)){
+            return String.format("Student with roll no = %d, deleted successfully",rollNo);
+        }else {
+            String msg = "Student with roll no = "+rollNo+" not found";
+            return msg;
+        }
+    }
+
+    // Request Param
+    @PutMapping("/student/{rollNo}")
+    public Student updateStudent(@RequestBody Student updatedStudent, @PathVariable long rollNo) {
+
+        return studentService.updateByRollNo(rollNo, updatedStudent);
+
+    }
+
 }
