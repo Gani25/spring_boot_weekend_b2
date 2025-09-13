@@ -1,5 +1,6 @@
 package com.sprk.student_management.service.impl;
 
+import com.sprk.student_management.dto.StudentDto;
 import com.sprk.student_management.entity.Student;
 import com.sprk.student_management.repository.StudentRepository;
 import com.sprk.student_management.service.StudentService;
@@ -18,7 +19,8 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
 
     @Override
-    public Student saveStudent(Student student) {
+    public Student saveStudent(StudentDto studentDto) {
+        // Convert dto to entity
         Student dbStudent = studentRepository.save(student);
         return dbStudent;
     }

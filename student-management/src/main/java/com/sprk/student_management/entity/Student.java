@@ -7,7 +7,7 @@ import lombok.ToString;
 @Entity
 @Data
 @ToString
-public class Student {
+public class Student extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

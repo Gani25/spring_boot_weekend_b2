@@ -1,5 +1,6 @@
 package com.sprk.student_management.controller;
 
+import com.sprk.student_management.dto.StudentDto;
 import com.sprk.student_management.entity.Student;
 import com.sprk.student_management.service.StudentService;
 import lombok.Data;
@@ -17,9 +18,9 @@ public class StudentController {
     private final StudentService studentService;
 
     @PostMapping("/student")
-    public Student saveStudent(@RequestBody Student student) {
+    public Student saveStudent(@RequestBody StudentDto studentDto) {
 
-        Student savedStudent = studentService.saveStudent(student);
+        Student savedStudent = studentService.saveStudent(studentDto);
 
         return savedStudent;
     }
