@@ -21,6 +21,7 @@ public class Student extends BaseEntity {
 
     private String gender;
 
+    @Column(unique = true)
     private String email;
 
     private String phoneNumber;

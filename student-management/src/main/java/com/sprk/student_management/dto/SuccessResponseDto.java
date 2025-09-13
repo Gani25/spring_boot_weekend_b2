@@ -3,11 +3,11 @@ package com.sprk.student_management.dto;
 import lombok.Data;
 
 @Data
-public class SuccessResponseDto<Data> {
+public class SuccessResponseDto<D> {
 
     private int statusCode;
 
     private String message;
 
-    private Data data;
+    private D data;
 }

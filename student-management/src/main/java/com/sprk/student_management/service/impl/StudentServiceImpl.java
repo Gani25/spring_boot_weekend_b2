@@ -2,9 +2,13 @@ package com.sprk.student_management.service.impl;
 
 import com.sprk.student_management.dto.StudentDto;
 import com.sprk.student_management.entity.Student;
+import com.sprk.student_management.exception.StudentEmailAlreadyExists;
+import com.sprk.student_management.exception.StudentException;
+import com.sprk.student_management.mapper.StudentMapper;
 import com.sprk.student_management.repository.StudentRepository;
 import com.sprk.student_management.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,12 +21,23 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
 
     @Override
-    public Student saveStudent(StudentDto studentDto) {
+    public StudentDto saveStudent(StudentDto studentDto) {
+        // CHeck if Email Already available then dont save
+        // Throw Exception
+        Student studentByEmail = studentRepository.findByEmail(studentDto.getEmail());
+        if(studentByEmail != null){
+            String msg = String.format("Student with email = %s already available kindly select another email",studentDto.getEmail());
+            throw new StudentEmailAlreadyExists(msg,HttpStatus.BAD_REQUEST);
+        }
+
         // Convert dto to entity
+
+        Student student = studentMapper.mappedStudentDtoToStudent(studentDto);
         Student dbStudent = studentRepository.save(student);
-        return dbStudent;
+        return studentMapper.mappedStudentToStudentDto(dbStudent);
     }
 
     @Override

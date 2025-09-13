@@ -1,11 +1,14 @@
 package com.sprk.student_management.controller;
 
 import com.sprk.student_management.dto.StudentDto;
+import com.sprk.student_management.dto.SuccessResponseDto;
 import com.sprk.student_management.entity.Student;
 import com.sprk.student_management.service.StudentService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +21,14 @@ public class StudentController {
     private final StudentService studentService;
 
     @PostMapping("/student")
-    public Student saveStudent(@RequestBody StudentDto studentDto) {
+    public ResponseEntity<SuccessResponseDto<StudentDto>> saveStudent(@RequestBody StudentDto studentDto) {
 
-        Student savedStudent = studentService.saveStudent(studentDto);
-
-        return savedStudent;
+        StudentDto savedStudentDto = studentService.saveStudent(studentDto);
+        SuccessResponseDto<StudentDto> successResponseDto = new SuccessResponseDto<>();
+        successResponseDto.setData(savedStudentDto);
+        successResponseDto.setMessage("Student Saved Successfully");
+        successResponseDto.setStatusCode(HttpStatus.CREATED.value());
+        return ResponseEntity.status(HttpStatus.CREATED).body(successResponseDto);
     }
 
     @GetMapping("/students")
