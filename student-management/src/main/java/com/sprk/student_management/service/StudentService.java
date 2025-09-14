@@ -18,5 +18,5 @@ public interface StudentService {
 
     boolean deleteStudentByRollNo(long rollNo);
 
-    Student updateByRollNo(long rollNo, Student updatedStudent);
+    StudentDto updateByRollNo(long rollNo, StudentDto updatedStudent);
 }

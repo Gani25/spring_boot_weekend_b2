@@ -4,6 +4,7 @@ import com.sprk.student_management.dto.StudentDto;
 import com.sprk.student_management.entity.Student;
 import com.sprk.student_management.exception.StudentEmailAlreadyExists;
 import com.sprk.student_management.exception.StudentException;
+import com.sprk.student_management.exception.StudentNotFoundException;
 import com.sprk.student_management.mapper.StudentMapper;
 import com.sprk.student_management.repository.StudentRepository;
 import com.sprk.student_management.service.StudentService;
@@ -78,15 +79,19 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student updateByRollNo(long rollNo, Student updatedStudent) {
+    public StudentDto updateByRollNo(long rollNo, StudentDto updatedStudentDto) {
         Student existingStudent = studentRepository.findById(rollNo).orElse(null);
         if (existingStudent == null) {
             // no update return empty obj
-            return null;
+            // throw exception
+            throw new StudentNotFoundException(String.format("Student with rollno = %d not exists"),HttpStatus.NOT_FOUND);
         }
         // update logic
+        Student updatedStudent = studentMapper.mappedStudentDtoToStudent(updatedStudentDto);
         updatedStudent.setRollNo(rollNo); // Added rollno so it will update
-        return studentRepository.save(updatedStudent);
+        Student student = studentRepository.save(updatedStudent);
+
+        return studentMapper.mappedStudentToStudentDto(student);
 
     }
 }

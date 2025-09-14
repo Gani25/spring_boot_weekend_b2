@@ -68,9 +68,16 @@ public class StudentController {
 
     // Request Param
     @PutMapping("/student/{rollNo}")
-    public Student updateStudent(@RequestBody Student updatedStudent, @PathVariable long rollNo) {
+    public ResponseEntity<SuccessResponseDto<StudentDto>> updateStudent(@Valid @RequestBody StudentDto updatedStudentDto, @PathVariable long rollNo) {
 
-        return studentService.updateByRollNo(rollNo, updatedStudent);
+        StudentDto updatedStudentDto1 = studentService.updateByRollNo(rollNo,updatedStudentDto );
+
+        SuccessResponseDto<StudentDto> successResponseDto = new SuccessResponseDto<>();
+        successResponseDto.setData(updatedStudentDto1);
+        successResponseDto.setStatusCode(HttpStatus.OK.value());
+        successResponseDto.setMessage(String.format("Student with roll no = %d Updated Successfully",rollNo));
+
+        return ResponseEntity.ok(successResponseDto);
 
     }
 
