@@ -10,7 +10,7 @@ import java.util.List;
 public interface StudentService {
     StudentDto saveStudent(StudentDto studentDto);
 
-    List<Student> getAllStudents();
+    List<StudentDto> getAllStudentDtos();
 
     Student getStudentByRollNo(long rollNo);
 

@@ -28,9 +28,9 @@ public class StudentServiceImpl implements StudentService {
         // CHeck if Email Already available then dont save
         // Throw Exception
         Student studentByEmail = studentRepository.findByEmail(studentDto.getEmail());
-        if(studentByEmail != null){
-            String msg = String.format("Student with email = %s already available kindly select another email",studentDto.getEmail());
-            throw new StudentEmailAlreadyExists(msg,HttpStatus.BAD_REQUEST);
+        if (studentByEmail != null) {
+            String msg = String.format("Student with email = %s already available kindly select another email", studentDto.getEmail());
+            throw new StudentEmailAlreadyExists(msg, HttpStatus.BAD_REQUEST);
         }
 
         // Convert dto to entity
@@ -41,8 +41,19 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public List<StudentDto> getAllStudentDtos() {
+
+        List<Student> students = studentRepository.findAll();
+        List<StudentDto> studentDtos = students
+                .stream()
+                .map((student) -> studentMapper.mappedStudentToStudentDto(student))
+                .toList();
+//        List<StudentDto> studentDtos1 = students
+//                .stream()
+//                .map(studentMapper::mappedStudentToStudentDto)
+//                .toList();
+
+        return studentDtos;
     }
 
     @Override

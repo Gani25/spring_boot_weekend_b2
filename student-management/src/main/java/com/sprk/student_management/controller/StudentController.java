@@ -4,6 +4,7 @@ import com.sprk.student_management.dto.StudentDto;
 import com.sprk.student_management.dto.SuccessResponseDto;
 import com.sprk.student_management.entity.Student;
 import com.sprk.student_management.service.StudentService;
+import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class StudentController {
     private final StudentService studentService;
 
     @PostMapping("/student")
-    public ResponseEntity<SuccessResponseDto<StudentDto>> saveStudent(@RequestBody StudentDto studentDto) {
+    public ResponseEntity<SuccessResponseDto<StudentDto>> saveStudent(@Valid @RequestBody StudentDto studentDto) {
 
         StudentDto savedStudentDto = studentService.saveStudent(studentDto);
         SuccessResponseDto<StudentDto> successResponseDto = new SuccessResponseDto<>();
@@ -32,14 +33,21 @@ public class StudentController {
     }
 
     @GetMapping("/students")
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    public  ResponseEntity<SuccessResponseDto<List<StudentDto>>> getAllStudents() {
+        SuccessResponseDto<List<StudentDto>> successResponseDto = new SuccessResponseDto<>();
+        List<StudentDto> allStudentDtos = studentService.getAllStudentDtos();
+        successResponseDto.setData(allStudentDtos);
+        successResponseDto.setStatusCode(HttpStatus.OK.value());
+        successResponseDto.setMessage("All Students Fetch Successfully");
+
+        return ResponseEntity.ok(successResponseDto);
     }
 
     @GetMapping("/student/{rollNo}")
-    public Student getStudent(@PathVariable long rollNo) {
+    public ResponseEntity<SuccessResponseDto<StudentDto>> getStudent(@PathVariable long rollNo) {
 
-        return studentService.getStudentByRollNo(rollNo);
+//        return studentService.getStudentByRollNo(rollNo);
+        return null;
 
     }
 

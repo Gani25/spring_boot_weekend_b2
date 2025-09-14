@@ -16,7 +16,7 @@ public class StudentDto {
     @NotBlank(message = "Last name cannot be empty")
     private String lastName;
 
-    @Size(min = 1, message = "Age cannot be negative or 0")
+    @Min(value = 1,message = "Age cannot be negative")
     private int age;
 
     private String gender;
