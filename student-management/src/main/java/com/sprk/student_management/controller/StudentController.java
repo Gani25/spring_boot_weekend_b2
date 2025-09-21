@@ -44,11 +44,17 @@ public class StudentController {
     }
 
     @GetMapping("/student/{rollNo}")
-    public ResponseEntity<SuccessResponseDto<StudentDto>> getStudent(@PathVariable long rollNo) {
+    public ResponseEntity<SuccessResponseDto<StudentDto>> getStudent(@PathVariable(name = "rollNo") String rollNoStr) {
+
+        // Throw error from here only -> Business Logic / Service
 
 //        return studentService.getStudentByRollNo(rollNo);
-        return null;
-
+        StudentDto studentDto = studentService.getStudentByRollNo(rollNoStr);
+        SuccessResponseDto<StudentDto> successResponseDto = new SuccessResponseDto<>();
+        successResponseDto.setData(studentDto);
+        successResponseDto.setMessage(String.format("Fetch student with roll no = %s successfully",rollNoStr));
+        successResponseDto.setStatusCode(HttpStatus.OK.value());
+        return ResponseEntity.ok(successResponseDto);
     }
 
     @GetMapping("/student/gender/{gender}")

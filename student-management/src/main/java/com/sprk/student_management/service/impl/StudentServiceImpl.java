@@ -1,7 +1,9 @@
 package com.sprk.student_management.service.impl;
 
+import com.sprk.student_management.constant.StudentApiConstant;
 import com.sprk.student_management.dto.StudentDto;
 import com.sprk.student_management.entity.Student;
+import com.sprk.student_management.exception.RollNumberIncorrectException;
 import com.sprk.student_management.exception.StudentEmailAlreadyExists;
 import com.sprk.student_management.exception.StudentException;
 import com.sprk.student_management.exception.StudentNotFoundException;
@@ -58,8 +60,22 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student getStudentByRollNo(long rollNo) {
-        return studentRepository.findById(rollNo).orElse(null);
+    public StudentDto getStudentByRollNo(String rollNoStr) {
+        if(!rollNoStr.matches("^\\d+$")){
+            throw new RollNumberIncorrectException(String.format(StudentApiConstant.INCORRECT_ROLL_NUMBER_FORMAT,rollNoStr),HttpStatus.valueOf(StudentApiConstant.BAD_REQUEST_STATUS));
+        }
+
+        // If not working means roll number only contains number
+        long rollNo = Long.parseLong(rollNoStr);// type conversion
+        Student student = studentRepository
+                .findById(rollNo)
+                .orElseThrow(()-> new StudentNotFoundException(String
+                        .format("Student with rollno = %d not exists", rollNo),HttpStatus.valueOf(StudentApiConstant.BAD_REQUEST_STATUS))
+                );
+
+        StudentDto studentDto = studentMapper.mappedStudentToStudentDto(student);
+
+        return studentDto;
     }
 
     @Override
@@ -80,12 +96,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto updateByRollNo(long rollNo, StudentDto updatedStudentDto) {
-        Student existingStudent = studentRepository.findById(rollNo).orElse(null);
-        if (existingStudent == null) {
-            // no update return empty obj
-            // throw exception
-            throw new StudentNotFoundException(String.format("Student with rollno = %d not exists"),HttpStatus.NOT_FOUND);
-        }
+//        Student existingStudent = studentRepository.findById(rollNo).orElse(null);
+        Student existingStudent = studentRepository
+                .findById(rollNo)
+                .orElseThrow(()->new StudentNotFoundException(String
+                        .format("Student with rollno = %d not exists", rollNo),HttpStatus.NOT_FOUND)
+                );
         // update logic
         Student updatedStudent = studentMapper.mappedStudentDtoToStudent(updatedStudentDto);
         updatedStudent.setRollNo(rollNo); // Added rollno so it will update

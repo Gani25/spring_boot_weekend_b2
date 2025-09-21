@@ -12,7 +12,7 @@ public interface StudentService {
 
     List<StudentDto> getAllStudentDtos();
 
-    Student getStudentByRollNo(long rollNo);
+    StudentDto getStudentByRollNo(String rollNo);
 
     List<Student> getStudentsByGender(String gender);
 
