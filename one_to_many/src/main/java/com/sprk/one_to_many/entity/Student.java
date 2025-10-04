@@ -1,8 +1,10 @@
-package com.sprk.one_to_one.entity;
+package com.sprk.one_to_many.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -20,10 +22,11 @@ public class Student {
 
     private int age;
 
-    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "student_detail_id")
+    // One To Many
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "student")
     @JsonManagedReference
-    private StudentDetail studentDetail;
+    private List<Course> coursesEnrolled;
+
 
 
 }

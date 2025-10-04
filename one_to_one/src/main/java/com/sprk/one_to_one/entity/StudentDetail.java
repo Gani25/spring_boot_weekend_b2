@@ -1,9 +1,7 @@
 package com.sprk.one_to_one.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -17,6 +15,10 @@ public class StudentDetail {
     private String hobby;
 
     private String education;
+
+    @OneToOne(mappedBy = "studentDetail")
+    @JsonBackReference
+    private Student student;
 
 
 }
