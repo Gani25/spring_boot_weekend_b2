@@ -2,6 +2,7 @@ package com.sprk.one_to_many.controller;
 
 import com.sprk.one_to_many.entity.Course;
 import com.sprk.one_to_many.entity.Student;
+import com.sprk.one_to_many.repository.CourseRepository;
 import com.sprk.one_to_many.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 public class StudentController {
 
     private final StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
 
     // Student -> Register id -> course purchase
 
@@ -55,6 +57,52 @@ public class StudentController {
     @GetMapping("/{rollno}")
     public Student getStudentByRollNo(@PathVariable int rollno){
         return studentRepository.findById(rollno).orElseThrow(() -> new RuntimeException("Not Found"));
+    }
+
+    @PutMapping("/update-student/{rollno}")
+    public Student updateStudent(@PathVariable int rollno, @RequestBody Student updatedStudent) {
+        Student student = studentRepository.findById(rollno).orElseThrow(() -> new RuntimeException("Not Found"));
+
+        student.setName(updatedStudent.getName());
+        student.setGender(updatedStudent.getGender());
+        student.setPhone(updatedStudent.getPhone());
+        student.setAge(updatedStudent.getAge());
+        return studentRepository.save(student);
+
+    }
+
+    @GetMapping("/all")
+    public List<Student> getAllStudents(){
+        return studentRepository.findAll();
+    }
+
+    // update course
+    @PutMapping("/update-course/{rollno}/{courseId}")
+    public Student updateCourse(@PathVariable int rollno, @PathVariable int courseId, @RequestBody Course updatedCourse) {
+        Student student = studentRepository.findById(rollno).orElseThrow(() -> new RuntimeException("Not Found"));
+
+        Course course = courseRepository.findByCourseIdAndStudent(courseId, student).orElseThrow(() -> new RuntimeException("Not Found"));
+
+
+
+        List<Course> coursesEnrolled = student.getCoursesEnrolled();
+        if (coursesEnrolled == null) {
+            throw new RuntimeException("Buy Course First");
+        }
+        for(Course courseEnrolled : coursesEnrolled) {
+            if (courseEnrolled.getCourseId() == course.getCourseId()) {
+                coursesEnrolled.remove(courseEnrolled);
+
+                courseEnrolled.setCourseDescription(updatedCourse.getCourseDescription());
+                courseEnrolled.setCourseName(updatedCourse.getCourseName());
+                courseEnrolled.setStudent(student);
+                courseEnrolled.setCourseDuration(updatedCourse.getCourseDuration());
+                coursesEnrolled.add(courseEnrolled);
+            }
+        }
+        student.setCoursesEnrolled(coursesEnrolled);
+        return studentRepository.save(student);
+
     }
 
 }
