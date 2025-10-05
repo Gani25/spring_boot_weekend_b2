@@ -1,8 +1,10 @@
-package com.sprk.one_to_many.entity;
+package com.sprk.many_to_many.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -18,9 +20,7 @@ public class Course {
 
     private String courseDuration;
 
-    // Many to One
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "roll_no")
-    @JsonBackReference
-    private Student student;
+    // Many to Many
+    @ManyToMany(mappedBy = "coursesEnrolled")
+    private List<Student> students;
 }

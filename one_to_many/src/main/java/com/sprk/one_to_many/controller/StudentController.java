@@ -128,5 +128,4 @@ public class StudentController {
         return "Student Deleted";
     }
 
-//    Delete only course
 }
