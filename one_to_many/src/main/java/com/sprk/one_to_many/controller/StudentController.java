@@ -38,7 +38,7 @@ public class StudentController {
         if (coursesEnrolled == null) {
             coursesEnrolled = new ArrayList<>();
         }
-         courses =  courses
+        courses = courses
                 .stream()
                 .map((tempCourse) -> {
                     tempCourse.setStudent(student);
@@ -55,7 +55,7 @@ public class StudentController {
     }
 
     @GetMapping("/{rollno}")
-    public Student getStudentByRollNo(@PathVariable int rollno){
+    public Student getStudentByRollNo(@PathVariable int rollno) {
         return studentRepository.findById(rollno).orElseThrow(() -> new RuntimeException("Not Found"));
     }
 
@@ -72,7 +72,7 @@ public class StudentController {
     }
 
     @GetMapping("/all")
-    public List<Student> getAllStudents(){
+    public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
@@ -84,12 +84,11 @@ public class StudentController {
         Course course = courseRepository.findByCourseIdAndStudent(courseId, student).orElseThrow(() -> new RuntimeException("Not Found"));
 
 
-
         List<Course> coursesEnrolled = student.getCoursesEnrolled();
         if (coursesEnrolled == null) {
             throw new RuntimeException("Buy Course First");
         }
-        for(Course courseEnrolled : coursesEnrolled) {
+        for (Course courseEnrolled : coursesEnrolled) {
             if (courseEnrolled.getCourseId() == course.getCourseId()) {
                 coursesEnrolled.remove(courseEnrolled);
 
@@ -105,4 +104,29 @@ public class StudentController {
 
     }
 
+    @DeleteMapping("/delete")
+    public String deleteStudent(@RequestParam int rollno) {
+        Student dbStudent = studentRepository.findById(rollno).orElseThrow(() -> new RuntimeException("Not Found"));
+
+        dbStudent
+                .getCoursesEnrolled()
+                .stream()
+                .map((course) -> {
+                    course.setStudent(null);
+                    return course;
+                })
+                .toList();
+//        List<Course> updatedCourse = dbCourses
+//                .stream()
+//                .map((course) -> {
+//                    course.setStudent(null);
+//                    return course;
+//                }).toList();
+
+        dbStudent.setCoursesEnrolled(null);
+        studentRepository.delete(dbStudent);
+        return "Student Deleted";
+    }
+
+//    Delete only course
 }

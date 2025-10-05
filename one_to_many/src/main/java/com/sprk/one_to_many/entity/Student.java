@@ -23,7 +23,7 @@ public class Student {
     private int age;
 
     // One To Many
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "student")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH},mappedBy = "student")
     @JsonManagedReference
     private List<Course> coursesEnrolled;
 
