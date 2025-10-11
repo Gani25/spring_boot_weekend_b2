@@ -3,11 +3,13 @@ package com.sprk.many_to_many.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Data
+@ToString(exclude = {"coursesEnrolled"})
 public class Student {
 
     @Id
@@ -30,7 +32,7 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "course_id")
 
     )
-    @JsonManagedReference
+
     private List<Course> coursesEnrolled;
 
 

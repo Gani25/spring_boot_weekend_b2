@@ -1,6 +1,7 @@
 package com.sprk.many_to_many.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,5 +23,6 @@ public class Course {
 
     // Many to Many
     @ManyToMany(mappedBy = "coursesEnrolled")
+    @JsonIgnore
     private List<Student> students;
 }
