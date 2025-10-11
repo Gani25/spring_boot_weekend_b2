@@ -1,0 +1,55 @@
+package com.sprk.many_to_many.controller;
+
+import com.sprk.many_to_many.entity.Course;
+import com.sprk.many_to_many.entity.Student;
+import com.sprk.many_to_many.repository.CourseRepository;
+import com.sprk.many_to_many.repository.StudentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/detail")
+public class StudentCourseController {
+
+//    Buy -> Course(cid) / Login (rollNo)
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @PostMapping("/purchase")
+    public Student coursesEnrolled(@RequestParam int rollNo, @RequestParam  int courseId){
+
+        Student dbStudent = studentRepository.findById(rollNo).orElseThrow(()-> new RuntimeException("Student Not Found"));
+
+        Course course = courseRepository.findById(courseId).orElseThrow(()-> new RuntimeException("Course Not Found"));
+
+        List<Course>courses = dbStudent.getCoursesEnrolled() == null ? new ArrayList<>() : dbStudent.getCoursesEnrolled();
+
+        if(!(courses.contains(course))){
+            courses.add(course);
+        }
+
+        dbStudent.setCoursesEnrolled(courses);
+
+        return studentRepository.save(dbStudent);
+    }
+
+    @PostMapping("/purchase/courses")
+    public Student purchaseMultipleCourses(@RequestParam int rollNo, @RequestParam  String courseId){
+        List<Integer> coursesId = new ArrayList<>();
+        String courseIdStrArr[] = courseId.split(",");
+        for(String courseIdStr : courseIdStrArr){
+            System.out.println(courseIdStr);
+        }
+        return null;
+    }
+
+}
