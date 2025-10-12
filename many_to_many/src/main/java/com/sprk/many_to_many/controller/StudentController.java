@@ -5,6 +5,8 @@ import com.sprk.many_to_many.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/student")
 public class StudentController {
@@ -25,5 +27,9 @@ public class StudentController {
     @GetMapping("/show/{rollNo}")
     public Student showStudent(@PathVariable int rollNo) {
         return studentRepository.findById(rollNo).orElseThrow(()->new RuntimeException("Student Not Found"));
+    }
+    @GetMapping("/show-all")
+    public List<Student> showAllStudent() {
+        return studentRepository.findAll();
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/detail")
 public class StudentCourseController {
 
-//    Buy -> Course(cid) / Login (rollNo)
+    //    Buy -> Course(cid) / Login (rollNo)
     @Autowired
     private StudentRepository studentRepository;
 
@@ -25,15 +25,15 @@ public class StudentCourseController {
     private CourseRepository courseRepository;
 
     @PostMapping("/purchase")
-    public Student coursesEnrolled(@RequestParam int rollNo, @RequestParam  int courseId){
+    public Student coursesEnrolled(@RequestParam int rollNo, @RequestParam int courseId) {
 
-        Student dbStudent = studentRepository.findById(rollNo).orElseThrow(()-> new RuntimeException("Student Not Found"));
+        Student dbStudent = studentRepository.findById(rollNo).orElseThrow(() -> new RuntimeException("Student Not Found"));
 
-        Course course = courseRepository.findById(courseId).orElseThrow(()-> new RuntimeException("Course Not Found"));
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Course Not Found"));
 
-        List<Course>courses = dbStudent.getCoursesEnrolled() == null ? new ArrayList<>() : dbStudent.getCoursesEnrolled();
+        List<Course> courses = dbStudent.getCoursesEnrolled() == null ? new ArrayList<>() : dbStudent.getCoursesEnrolled();
 
-        if(!(courses.contains(course))){
+        if (!(courses.contains(course))) {
             courses.add(course);
         }
 
@@ -43,13 +43,34 @@ public class StudentCourseController {
     }
 
     @PostMapping("/purchase/courses")
-    public Student purchaseMultipleCourses(@RequestParam int rollNo, @RequestParam  String courseId){
+    public Student purchaseMultipleCourses(@RequestParam int rollNo, @RequestParam String courseId) {
         List<Integer> coursesId = new ArrayList<>();
         String courseIdStrArr[] = courseId.split(",");
-        for(String courseIdStr : courseIdStrArr){
-            System.out.println(courseIdStr);
+        for (String courseIdStr : courseIdStrArr) {
+            // System.out.println(courseIdStr);
+            coursesId.add(Integer.parseInt(courseIdStr));
         }
-        return null;
+//        System.out.println(courseId);
+        Student dbStudent = studentRepository.findById(rollNo).orElseThrow(() -> new RuntimeException("Student Not Found"));
+        List<Course> alreadyEnrolledCourses = dbStudent.getCoursesEnrolled() == null ? new ArrayList<>() : dbStudent.getCoursesEnrolled();
+
+        List<Course> newCourses = new ArrayList<>();
+        for(int theCourseId:coursesId){
+            Course course = courseRepository.findById(theCourseId).orElse(null);
+            if(course != null){
+                if(!alreadyEnrolledCourses.contains(course)){
+                    newCourses.add(course);
+                }
+            }
+        }
+        if(!newCourses.isEmpty()){
+            alreadyEnrolledCourses.addAll(newCourses);
+            dbStudent.setCoursesEnrolled(alreadyEnrolledCourses);
+        }else{
+            throw new RuntimeException("Already Courses Purchased or you haven't enrolled any courses");
+        }
+        Student student = studentRepository.save(dbStudent);
+        return student;
     }
 
 }
