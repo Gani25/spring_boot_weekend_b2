@@ -32,4 +32,12 @@ public class StudentController {
     public List<Student> showAllStudent() {
         return studentRepository.findAll();
     }
+
+    @DeleteMapping("/delete")
+    public String deleteStudent(@RequestParam int rollNo) {
+        studentRepository.findById(rollNo).orElseThrow(()-> new RuntimeException("Student Not Found"));
+
+        studentRepository.deleteById(rollNo);
+        return "Student Deleted";
+    }
 }

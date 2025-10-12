@@ -17,6 +17,9 @@ public class CourseController {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
     @PostMapping("/add")
     public Course saveCourse(@RequestBody Course course) {
         course.setStudents(null);
@@ -29,5 +32,21 @@ public class CourseController {
     @GetMapping("/all")
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
+    }
+
+    @DeleteMapping("/delete")
+    public String deleteCourse(@RequestParam int courseId) {
+        Course dbCourse = courseRepository.findById(courseId).orElseThrow(()-> new RuntimeException("Course Not Found"));
+
+        List<Student> dbStudents = dbCourse.getStudents();
+
+        for(Student student : dbStudents) {
+            student.getCoursesEnrolled().remove(dbCourse);
+        }
+
+        studentRepository.saveAll(dbStudents);
+        courseRepository.delete(dbCourse);
+
+        return "Course Deleted";
     }
 }

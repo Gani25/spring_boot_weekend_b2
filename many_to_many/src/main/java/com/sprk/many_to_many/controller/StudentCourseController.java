@@ -5,10 +5,7 @@ import com.sprk.many_to_many.entity.Student;
 import com.sprk.many_to_many.repository.CourseRepository;
 import com.sprk.many_to_many.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +68,26 @@ public class StudentCourseController {
         }
         Student student = studentRepository.save(dbStudent);
         return student;
+    }
+
+    // Student first enrolled but latter want to de-enrolled
+    @DeleteMapping("/drop")
+    public Student dropCourseFromStudent(@RequestParam int rollNo, @RequestParam int courseId) {
+
+        Student dbStudent = studentRepository.findById(rollNo).orElseThrow(() -> new RuntimeException("Student Not Found"));
+
+        Course enrolledCourse = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Course Not Found"));
+
+        List<Course> studentCoursesList = dbStudent.getCoursesEnrolled();
+        if(!studentCoursesList.contains(enrolledCourse)){
+            throw new RuntimeException(String.format("Course with id = %d, Not Found",courseId));
+        }
+        studentCoursesList.remove(enrolledCourse);
+        dbStudent.setCoursesEnrolled(studentCoursesList);
+
+        return studentRepository.save(dbStudent);
+
+
     }
 
 }
