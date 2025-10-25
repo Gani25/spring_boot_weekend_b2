@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SPRK Student</title>
+
+    <th:block th:insert="header-links::headLinks"> </th:block>
+</head>
+<body>
+<!--Navbar include-->
+<nav th:replace="navbar::navbar_body">
+
+</nav>
+
+<div class="container">
+<h1 class="fs-1 text-center my-5">Welcome To SPRK Portal</h1>
+    <div class="d-flex justify-content-between w-50 mx-auto">
+
+        <a class="btn btn-lg btn-outline-dark" th:href="@{/student}">Add Student</a>
+        <a class="btn btn-lg btn-outline-primary">List Of Students</a>
+
+    </div>
+
+
+</div>
+
+    <th:block th:insert="body-links::bodyLinks"></th:block>
+</body>
+</html>
