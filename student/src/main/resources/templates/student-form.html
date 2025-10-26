@@ -13,6 +13,7 @@
 </nav>
 
 <div class="container">
+    <div class="alert alert-danger w-50 mx-auto text-center mt-5" th:if="${errorMsg}" th:text="${errorMsg}"></div>
     <h1 class="fs-1 text-center my-5">Welcome To SPRK Portal</h1>
 
     <form class="row g-3 w-75 mx-auto" th:object="${studentDto}" th:action="@{/student}" method="post">
