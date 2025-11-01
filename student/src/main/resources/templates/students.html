@@ -14,7 +14,8 @@
 
 <div class="container">
     <div class="alert alert-success w-50 mx-auto text-center mt-5" th:if="${successMsg}" th:text="${successMsg}"></div>
-<h1 class="fs-1 text-center my-5">Welcome To SPRK Portal</h1>
+    <div class="alert alert-danger w-50 mx-auto text-center mt-5" th:if="${errorMsg}" th:text="${errorMsg}"></div>
+    <h1 class="fs-1 text-center my-5">Welcome To SPRK Portal</h1>
 
     <!--Table - Dashboard -> List Of Students-->
 
@@ -39,7 +40,7 @@
             <td th:text="${student.email}">@mdo</td>
             <td th:text="${student.gender}">@mdo</td>
             <td>
-                <a class="btn btn-outline-dark me-2"><i class="fa-solid fa-pencil"></i></a>
+                <a th:href="@{/student/show/{rollNo}(rollNo = ${student.rollNo})}" class="btn btn-outline-dark me-2"><i class="fa-solid fa-pencil"></i></a>
                 <a th:href="@{/student/delete/{rollNo}(rollNo = ${student.rollNo})}" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></a>
 
             </td>

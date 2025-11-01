@@ -60,4 +60,34 @@ public class StudentServiceImpl implements StudentService {
                 .toList();
         return allStudents;
     }
+
+    @Override
+    public boolean deleteByRollNo(String rollNo) {
+        int rollNoInt = Integer.parseInt(rollNo);
+
+        Student student = studentRepository.findById(rollNoInt).orElse(null);
+
+        if (student == null) {
+            return false;
+        }
+        studentRepository.delete(student);
+        return true;
+    }
+
+    @Override
+    public StudentDto findByRollNo(String rollNo) {
+        Student student = studentRepository.findById(Integer.parseInt(rollNo)).orElse(null);
+        if(student == null){
+            return null;
+        }
+        return StudentDto.builder()
+                .rollNo(student.getRollNo())
+                .firstName(student.getFirstName())
+                .lastName(student.getLastName())
+                .email(student.getEmail())
+                .phone(student.getPhone())
+                .gender(student.getGender())
+                .build();
+
+    }
 }

@@ -14,4 +14,8 @@ public interface StudentService {
     Student save(StudentDto studentDto);
 
     List<StudentDto> getListOfStudents();
+
+    boolean deleteByRollNo(String rollNo);
+
+    StudentDto findByRollNo(String rollNo);
 }
