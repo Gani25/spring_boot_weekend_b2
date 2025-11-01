@@ -3,6 +3,7 @@ package com.gani.student.service;
 import com.gani.student.dto.StudentDto;
 import com.gani.student.entity.Student;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface StudentService {
@@ -11,4 +12,6 @@ public interface StudentService {
     Optional<Student> findByPhone(String phone);
 
     Student save(StudentDto studentDto);
+
+    List<StudentDto> getListOfStudents();
 }

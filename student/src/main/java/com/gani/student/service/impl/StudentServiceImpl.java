@@ -7,6 +7,7 @@ import com.gani.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,5 +42,22 @@ public class StudentServiceImpl implements StudentService {
 
         Student stud = studentRepository.save(student);
         return stud;
+    }
+
+    @Override
+    public List<StudentDto> getListOfStudents() {
+        List<StudentDto> allStudents = studentRepository.findAll()
+                .stream()
+                .map(student -> StudentDto.builder()
+                        .firstName(student.getFirstName())
+                        .lastName(student.getLastName())
+                        .email(student.getEmail())
+                        .phone(student.getPhone())
+                        .gender(student.getGender())
+                        .rollNo(student.getRollNo())
+                        .build()
+                )
+                .toList();
+        return allStudents;
     }
 }

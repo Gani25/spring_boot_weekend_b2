@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SPRK Student</title>
+
+    <th:block th:insert="header-links::headLinks"> </th:block>
+</head>
+<body>
+<!--Navbar include-->
+<nav th:replace="navbar::navbar_body">
+
+</nav>
+
+<div class="container">
+    <div class="alert alert-success w-50 mx-auto text-center mt-5" th:if="${successMsg}" th:text="${successMsg}"></div>
+<h1 class="fs-1 text-center my-5">Welcome To SPRK Portal</h1>
+
+    <!--Table - Dashboard -> List Of Students-->
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Roll No</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Email</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student:${students}">
+            <td th:text="${student.rollNo}">1</td>
+            <td th:text="${student.firstName}">Mark</td>
+            <td th:text="${student.lastName}">Otto</td>
+            <td th:text="${student.phone}">@mdo</td>
+            <td th:text="${student.email}">@mdo</td>
+            <td th:text="${student.gender}">@mdo</td>
+            <td>
+                <a class="btn btn-outline-dark me-2"><i class="fa-solid fa-pencil"></i></a>
+                <a th:href="@{/student/delete/{rollNo}(rollNo = ${student.rollNo})}" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+    <th:block th:insert="body-links::bodyLinks"></th:block>
+</body>
+</html>

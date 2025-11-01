@@ -10,8 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 
@@ -50,5 +53,20 @@ public class StudentController {
         String successMsg = "Student with roll number: "+savedStudent.getRollNo()+", Saved Successfully";
         redirectAttributes.addFlashAttribute("successMsg", successMsg);
         return "redirect:/";
+    }
+
+    @GetMapping("/student/list")
+    public String showStudentList(Model model) {
+        List<StudentDto> students =  studentService.getListOfStudents();
+        model.addAttribute("students", students);
+
+        return "students";
+    }
+
+    @GetMapping("/student/delete/{rollNo}")
+    public String deleteStudentByRollNo(@PathVariable int rollNo){
+        // Logic
+        System.out.println(rollNo);
+        return "";
     }
 }
