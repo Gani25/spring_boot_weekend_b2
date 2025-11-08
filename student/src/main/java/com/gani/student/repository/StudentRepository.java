@@ -11,4 +11,5 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Optional<Student> findByPhone(String phone);
 
     Optional<Student> findByEmail(String email);
+
 }
