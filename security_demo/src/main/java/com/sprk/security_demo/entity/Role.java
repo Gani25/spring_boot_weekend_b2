@@ -15,8 +15,6 @@ public class Role {
 
     private String roleName;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<UserInfo>users;
 }
 
 //When Role table created -> If We don't found ROLE_USER in DB

@@ -19,30 +19,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // In Memory Database Login
-    /*@Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails normal = User
-                .withUsername("abdul")
-                .password("{noop}1234")
-                .roles("USER")
-                .build();
-        UserDetails admin = User
-                .withUsername("ankesh")
-                .password("{noop}1234")
-                .roles("USER","ADMIN")
-                .build();
-        UserDetails tester = User
-                .withUsername("rohan")
-                .password("{noop}1234")
-                .roles("USER","TESTER")
-                .build();
-
-        UserDetailsService userDetailsService = new InMemoryUserDetailsManager(normal,admin,tester);
-
-        return userDetailsService;
-    }*/
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -65,5 +41,29 @@ public class SecurityConfig {
         return http.build();
     }
 
+
+    // In Memory Database Login
+    /*@Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails normal = User
+                .withUsername("abdul")
+                .password("{noop}1234")
+                .roles("USER")
+                .build();
+        UserDetails admin = User
+                .withUsername("ankesh")
+                .password("{noop}1234")
+                .roles("USER","ADMIN")
+                .build();
+        UserDetails tester = User
+                .withUsername("rohan")
+                .password("{noop}1234")
+                .roles("USER","TESTER")
+                .build();
+
+        UserDetailsService userDetailsService = new InMemoryUserDetailsManager(normal,admin,tester);
+
+        return usxerDetailsService;
+    }*/
 
 }

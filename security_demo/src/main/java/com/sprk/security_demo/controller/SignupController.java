@@ -4,6 +4,7 @@ import com.sprk.security_demo.entity.Role;
 import com.sprk.security_demo.entity.UserInfo;
 import com.sprk.security_demo.repository.RoleRepository;
 import com.sprk.security_demo.repository.UserInfoRepository;
+import com.sprk.security_demo.service.UserInfoService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,21 +20,11 @@ public class SignupController {
 
     // account creation -> signup -> username, email, password,...
 
-    private final UserInfoRepository userInfoRepository;
-
-    private final RoleRepository roleRepository;
-
-    private final PasswordEncoder passwordEncoder;
+    private final UserInfoService userInfoService;
 
     @PostMapping("/signup")
     public UserInfo signup(@RequestBody UserInfo userInfo) {
-
-        userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
-
-        Role role = roleRepository.findByRoleName("ROLE_USER").get();
-        userInfo.setRoles(Set.of(role));
-
-        return userInfoRepository.save(userInfo);
+        return userInfoService.saveUserInfo(userInfo);
     }
 
 }
