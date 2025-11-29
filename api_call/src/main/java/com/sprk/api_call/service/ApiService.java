@@ -3,8 +3,12 @@ package com.sprk.api_call.service;
 import com.sprk.api_call.dto.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ApiService {
@@ -12,7 +16,6 @@ public class ApiService {
     @Value(value = "${weather.key}")
     private String apiKey;
 
-    @Autowired
     private RestTemplate restTemplate;
 
     public Root getApiResponse(String query, int forecastDays){
